@@ -3,9 +3,9 @@ module PopulateBoard exposing (..)
 import Array exposing (Array, initialize, repeat, toList)
 
 
-outOfRange : Int -> ( Int, Int ) -> Bool
-outOfRange range ( pos_x, pos_y ) =
-    pos_x < 0 || pos_y < 0 || pos_x >= range || pos_y >= range
+outOfRange : ( Int, Int ) -> ( Int, Int ) -> Bool
+outOfRange ( max_range, min_range ) ( pos_x, pos_y ) =
+    pos_x < min_range || pos_y < min_range || pos_x > max_range || pos_y > max_range
 
 
 indexByCord : ( Int, Int ) -> Int -> Int
@@ -18,7 +18,7 @@ indexByCord ( pos_x, pos_y ) boardHeight =
             pos_y * boardHeight
 
         pointOutOfRange =
-            outOfRange boardHeight
+            outOfRange ( boardHeight - 1, 0 )
     in
     if pointOutOfRange ( pos_x, pos_y ) then
         -1
