@@ -11,8 +11,7 @@ import Random.Array exposing (..)
 
 
 type alias Model =
-    { board : Array.Array String
-    , hiddenBoard : Array.Array String
+    { hiddenBoard : Array.Array String
     , boardSideHeight : Int
     , mineCount : Int
     }
@@ -20,8 +19,7 @@ type alias Model =
 
 initModel : Model
 initModel =
-    { board = repeat 9 "-"
-    , hiddenBoard = repeat 9 "0"
+    { hiddenBoard = repeat 9 "0"
     , boardSideHeight = 3
     , mineCount = 1
     }
@@ -48,8 +46,7 @@ updateBoard mineCount boardSideHeight =
             boardSideHeight * boardSideHeight
     in
     update CreateNewGame
-        { board = repeat boardLength "-"
-        , hiddenBoard = repeat boardLength "0"
+        { hiddenBoard = repeat boardLength "0"
         , boardSideHeight = boardSideHeight
         , mineCount = mineCount
         }
@@ -63,15 +60,14 @@ update msg model =
                 shuffledBoard =
                     Array.append
                         (repeat model.mineCount "*")
-                        (repeat (boardsize model.board - model.mineCount) "0")
+                        (repeat (boardsize model.hiddenBoard - model.mineCount) "0")
                         |> Random.Array.shuffle
             in
             ( model, Random.generate ShuffledList shuffledBoard )
 
         ShuffledList list ->
             ( { model
-                | board = repeat (boardsize model.board) "-"
-                , hiddenBoard = list
+                | hiddenBoard = list
               }
             , Cmd.none
             )
@@ -94,9 +90,7 @@ stringSplit string chunckSize =
 view : Model -> Html Msg
 view model =
     div []
-        [ div []
-            [ text (String.join "" (toList model.board)) ]
-        , stringSplit (populate model.hiddenBoard 0) model.boardSideHeight
+        [ stringSplit (populate model.hiddenBoard 0) model.boardSideHeight
             |> List.map (\e -> li [] [ text e ])
             |> ul []
         , div []

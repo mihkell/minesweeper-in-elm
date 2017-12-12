@@ -17,7 +17,7 @@ type alias Model =
 
 initModel : Model
 initModel =
-    { boardSideHeight = 2
+    { boardSideHeight = 3
     , mineCount = 1
     , board = Board.initModel
     }
@@ -53,11 +53,13 @@ update msg model =
                 ( newBoard, newCommand ) =
                     Board.update boardMsg model.board
             in
-            ( { model
-                | board = newBoard
-              }
-            , Cmd.map BoardMessage newCommand
-            )
+            Debug.log
+                ("MSG " ++ toString boardMsg)
+                ( { model
+                    | board = newBoard
+                  }
+                , Cmd.map BoardMessage newCommand
+                )
 
         InputBoardSize value ->
             let
@@ -112,5 +114,5 @@ main =
         { view = view
         , update = update
         , subscriptions = \_ -> Sub.none
-        , init = ( initModel, Cmd.none )
+        , init = update CreateNewGame initModel
         }
