@@ -97,7 +97,8 @@ view model =
             (List.map
                 (\e -> p [] [ text e ])
                 [ "'-' - not viewd;"
-                , "  -- '0' free; -- 1..8 mineCound;"
+                , "  -- '0' free;"
+                , " -- 1..8 mineCount;"
                 , " -- '*' mine"
                 ]
             )

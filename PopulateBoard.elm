@@ -93,15 +93,13 @@ findNearbyMines board position =
 
 populate : Array String -> Int -> String
 populate board index =
-    Debug.log "Poplate"
-        (case Array.get index board of
-            Just val ->
-                if "*" == val then
-                    "*" ++ populate board (index + 1)
-                else
-                    toString (findNearbyMines board index)
-                        ++ populate board (index + 1)
+    case Array.get index board of
+        Just val ->
+            if "*" == val then
+                "*" ++ populate board (index + 1)
+            else
+                toString (findNearbyMines board index)
+                    ++ populate board (index + 1)
 
-            Nothing ->
-                ""
-        )
+        Nothing ->
+            ""

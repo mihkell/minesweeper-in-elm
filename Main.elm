@@ -53,13 +53,11 @@ update msg model =
                 ( newBoard, newCommand ) =
                     Board.update boardMsg model.board
             in
-            Debug.log
-                ("MSG " ++ toString boardMsg)
-                ( { model
-                    | board = newBoard
-                  }
-                , Cmd.map BoardMessage newCommand
-                )
+            ( { model
+                | board = newBoard
+              }
+            , Cmd.map BoardMessage newCommand
+            )
 
         InputBoardSize value ->
             let
