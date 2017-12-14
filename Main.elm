@@ -18,8 +18,8 @@ type alias Model =
 
 initModel : Model
 initModel =
-    { boardSideHeight = 3
-    , mineCount = 1
+    { boardSideHeight = 12
+    , mineCount = 12
     , board = Board.initModel
     }
 
