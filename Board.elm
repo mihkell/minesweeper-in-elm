@@ -2,6 +2,7 @@ module Board exposing (..)
 
 import Array exposing (Array, initialize, repeat, toList)
 import Html exposing (..)
+import Html.Events exposing (onClick)
 import PopulateBoard exposing (populate)
 import Random exposing (..)
 import Random.Array exposing (..)
@@ -32,6 +33,7 @@ initModel =
 type Msg
     = CreateNewGame
     | ShuffledList (Array String)
+    | ClickedOnIndex Int
 
 
 boardsize : Array String -> Int
@@ -72,6 +74,11 @@ update msg model =
             , Cmd.none
             )
 
+        ClickedOnIndex index ->
+            ( model
+            , Cmd.none
+            )
+
 
 
 -- View
@@ -87,12 +94,35 @@ stringSplit string chunckSize =
         []
 
 
+createHiddenBoardSquare : Model -> Int -> String -> List (Html Msg)
+createHiddenBoardSquare model rowNumber rowText =
+    stringSplit rowText 1
+        |> List.indexedMap
+            (\ix ex ->
+                span
+                    [ onClick
+                        (ClickedOnIndex
+                            (ix + (rowNumber * model.boardSideHeight))
+                        )
+                    ]
+                    [ text ex ]
+            )
+
+
+createHiddenBoard : Model -> Html Msg
+createHiddenBoard model =
+    stringSplit (populate model.hiddenBoard 0) model.boardSideHeight
+        |> List.indexedMap
+            (\rowNumber rowText ->
+                li [] (createHiddenBoardSquare model rowNumber rowText)
+            )
+        |> ul []
+
+
 view : Model -> Html Msg
 view model =
     div []
-        [ stringSplit (populate model.hiddenBoard 0) model.boardSideHeight
-            |> List.map (\e -> li [] [ text e ])
-            |> ul []
+        [ createHiddenBoard model
         , div []
             (List.map
                 (\e -> p [] [ text e ])

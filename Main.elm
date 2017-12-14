@@ -41,7 +41,9 @@ update msg model =
         CreateNewGame ->
             let
                 ( newBoard, newCommand ) =
-                    Board.updateBoard model.mineCount model.boardSideHeight
+                    Board.updateBoard
+                        model.mineCount
+                        model.boardSideHeight
             in
             ( { model
                 | board = newBoard
