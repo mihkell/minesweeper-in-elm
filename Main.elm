@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Board exposing (..)
 import Html exposing (..)
+import Html.Attributes exposing (action)
 import Html.Events exposing (..)
 
 
@@ -98,7 +99,7 @@ update msg model =
 
 view : Model -> Html MainMsg
 view model =
-    div []
+    Html.form [ action "#" ]
         [ input [ onInput InputBoardSize ] []
         , input [ onInput InputMinesCount ] []
         , button [ onClick CreateNewGame ] [ text "Create" ]
