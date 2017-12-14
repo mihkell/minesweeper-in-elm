@@ -15,6 +15,7 @@ type alias Model =
     { hiddenBoard : Array.Array String
     , boardSideHeight : Int
     , mineCount : Int
+    , lastClickedValue : Int
     }
 
 
@@ -23,6 +24,7 @@ initModel =
     { hiddenBoard = repeat 9 "0"
     , boardSideHeight = 3
     , mineCount = 1
+    , lastClickedValue = -1
     }
 
 
@@ -48,9 +50,10 @@ updateBoard mineCount boardSideHeight =
             boardSideHeight * boardSideHeight
     in
     update CreateNewGame
-        { hiddenBoard = repeat boardLength "0"
-        , boardSideHeight = boardSideHeight
-        , mineCount = mineCount
+        { initModel
+            | hiddenBoard = repeat boardLength "0"
+            , boardSideHeight = boardSideHeight
+            , mineCount = mineCount
         }
 
 
@@ -75,7 +78,9 @@ update msg model =
             )
 
         ClickedOnIndex index ->
-            ( model
+            ( { model
+                | lastClickedValue = index
+              }
             , Cmd.none
             )
 
@@ -109,13 +114,15 @@ createHiddenBoardSquare model rowNumber rowText =
             )
 
 
+createBoardRow : Model -> Int -> String -> Html Msg
+createBoardRow model rowNumber rowText =
+    li [] (createHiddenBoardSquare model rowNumber rowText)
+
+
 createHiddenBoard : Model -> Html Msg
 createHiddenBoard model =
     stringSplit (populate model.hiddenBoard 0) model.boardSideHeight
-        |> List.indexedMap
-            (\rowNumber rowText ->
-                li [] (createHiddenBoardSquare model rowNumber rowText)
-            )
+        |> List.indexedMap (createBoardRow model)
         |> ul []
 
 
