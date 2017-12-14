@@ -89,19 +89,19 @@ update msg model =
 -- View
 
 
-stringSplit : String -> Int -> List String
-stringSplit string chunckSize =
+stringSplit : Int -> String -> List String
+stringSplit chunckSize string =
     if String.length string > 0 then
         List.append
             [ String.left chunckSize string ]
-            (stringSplit (String.dropLeft chunckSize string) chunckSize)
+            (stringSplit chunckSize (String.dropLeft chunckSize string))
     else
         []
 
 
 createHiddenBoardSquare : Model -> Int -> String -> List (Html Msg)
 createHiddenBoardSquare model rowNumber rowText =
-    stringSplit rowText 1
+    stringSplit 1 rowText
         |> List.indexedMap
             (\ix ex ->
                 span
@@ -119,9 +119,14 @@ createBoardRow model rowNumber rowText =
     li [] (createHiddenBoardSquare model rowNumber rowText)
 
 
+startIndex : Int
+startIndex =
+    0
+
+
 createHiddenBoard : Model -> Html Msg
 createHiddenBoard model =
-    stringSplit (populate model.hiddenBoard 0) model.boardSideHeight
+    stringSplit model.boardSideHeight (populate model.hiddenBoard startIndex)
         |> List.indexedMap (createBoardRow model)
         |> ul []
 
